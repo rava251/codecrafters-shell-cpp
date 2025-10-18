@@ -1,0 +1,15 @@
+Source: kubsh
+Section: utils
+Priority: optional
+Maintainer: Rava <rava@example.com>
+Build-Depends: debhelper (>= 9), g++, make
+Standards-Version: 4.1.4
+Homepage: https://github.com/rava251/codecrafters-shell-cpp
+
+Package: kubsh
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Custom shell implementation
+ A custom shell implementation with advanced features
+ including command history, VFS for user management,
+ and built-in utilities.
