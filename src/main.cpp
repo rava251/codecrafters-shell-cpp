@@ -38,6 +38,17 @@ private:
         }
     }
 
+    void executeCommand(const std::string& command) {
+        // Check for echo command
+        if (command.rfind("echo ", 0) == 0) {
+            std::string text = command.substr(5);
+            std::cout << text << std::endl;
+        } else {
+            // Default behavior - just print the input
+            std::cout << command << std::endl;
+        }
+    }
+
 public:
     Shell() {
         const char* home = getenv("HOME");
@@ -70,7 +81,7 @@ public:
             
             if (!input.empty()) {
                 addToHistory(input);
-                std::cout << input << std::endl;
+                executeCommand(input);
             }
         }
     }
