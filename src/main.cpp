@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
 #include <unistd.h>
 #include <pwd.h>
 #include <cstdlib>
@@ -40,7 +41,9 @@ private:
     }
 
     bool isBuiltinCommand(const std::string& command) {
-        return command == "\\q" || command.rfind("echo ", 0) == 0;
+        return command == "\\q" || 
+               command.rfind("echo ", 0) == 0 ||
+               command.rfind("\\e ", 0) == 0;
     }
 
     void executeBuiltinCommand(const std::string& command) {
@@ -51,6 +54,25 @@ private:
         else if (command.rfind("echo ", 0) == 0) {
             std::string text = command.substr(5);
             std::cout << text << std::endl;
+        }
+        else if (command.rfind("\\e ", 0) == 0) {
+            std::string var_name = command.substr(3);
+            char* value = getenv(var_name.c_str());
+            if (value) {
+                std::string env_value(value);
+                if (env_value.find(':') != std::string::npos) {
+                    // Split by colon and print each on new line
+                    std::istringstream iss(env_value);
+                    std::string item;
+                    while (std::getline(iss, item, ':')) {
+                        std::cout << item << std::endl;
+                    }
+                } else {
+                    std::cout << env_value << std::endl;
+                }
+            } else {
+                std::cout << "Environment variable '" << var_name << "' not found" << std::endl;
+            }
         }
     }
 
