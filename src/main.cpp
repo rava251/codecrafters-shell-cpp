@@ -4,6 +4,7 @@
 #include <fstream>
 #include <unistd.h>
 #include <pwd.h>
+#include <cstdlib>
 
 class Shell {
 private:
@@ -38,14 +39,27 @@ private:
         }
     }
 
-    void executeCommand(const std::string& command) {
-        // Check for echo command
-        if (command.rfind("echo ", 0) == 0) {
+    bool isBuiltinCommand(const std::string& command) {
+        return command == "\\q" || command.rfind("echo ", 0) == 0;
+    }
+
+    void executeBuiltinCommand(const std::string& command) {
+        if (command == "\\q") {
+            std::cout << "Goodbye!" << std::endl;
+            exit(0);
+        }
+        else if (command.rfind("echo ", 0) == 0) {
             std::string text = command.substr(5);
             std::cout << text << std::endl;
+        }
+    }
+
+    void executeCommand(const std::string& command) {
+        if (isBuiltinCommand(command)) {
+            executeBuiltinCommand(command);
         } else {
-            // Default behavior - just print the input
-            std::cout << command << std::endl;
+            // External command - execute via system
+            system(command.c_str());
         }
     }
 
@@ -74,15 +88,12 @@ public:
                 break;
             }
             
-            if (input == "\\q") {
-                std::cout << "Goodbye!" << std::endl;
-                break;
+            if (input.empty()) {
+                continue;
             }
             
-            if (!input.empty()) {
-                addToHistory(input);
-                executeCommand(input);
-            }
+            addToHistory(input);
+            executeCommand(input);
         }
     }
 };
