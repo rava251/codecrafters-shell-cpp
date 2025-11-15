@@ -13,6 +13,12 @@ int main() {
             break;
         }
         
+        if (input == "\\q") {
+            // Command to exit
+            std::cout << "Goodbye!" << std::endl;
+            break;
+        }
+        
         if (!input.empty()) {
             std::cout << input << std::endl;
         }
