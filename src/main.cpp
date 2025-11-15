@@ -35,7 +35,6 @@ private:
         return cmd == "\\q" || cmd.rfind("echo ", 0) == 0 || 
                cmd.rfind("\\e ", 0) == 0 || cmd.rfind("\\l ", 0) == 0;
     }
-
     void executeBuiltin(const std::string& cmd) {
         if (cmd == "\\q") {
             std::cout << "Goodbye!" << std::endl;
@@ -74,7 +73,6 @@ public:
     }
 
     ~Shell() { saveHistory(); }
-
     void run() {
         std::string input;
         while (true) {
